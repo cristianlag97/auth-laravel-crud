@@ -20,17 +20,18 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::group([
 
-    'middleware' => 'api',
-    'prefix' => 'auth'
+    'middleware' => ['jwt.verify'],
+    //'prefix' => 'auth'
 
 ], function ($router) {
 
-    Route::post('login', 'App\Http\Controllers\AuthController@login');
     Route::post('logout', 'App\Http\Controllers\AuthController@logout');
     Route::post('refresh', 'App\Http\Controllers\AuthController@refresh');
     Route::post('me', 'App\Http\Controllers\AuthController@me');
-    Route::post('register', 'App\Http\Controllers\AuthController@register');
+    Route::resource('categoria', 'App\Http\Controllers\categoriacontroller');
 });
+Route::post('login', 'App\Http\Controllers\AuthController@login');
+Route::post('register', 'App\Http\Controllers\AuthController@register');
 
 
 //Route::get('categoria', 'App\Http\Controllers\categoriacontroller@index');
@@ -40,5 +41,3 @@ Route::group([
 //Route::put('categoria/{id}', 'App\Http\Controllers\categoriacontroller@update');
 
 //Route::delete('categoria/{id}', 'App\Http\Controllers\categoriacontroller@destroy');
-
-Route::resource('categoria', 'App\Http\Controllers\categoriacontroller');

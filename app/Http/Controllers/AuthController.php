@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
+use JWTAuth;
+use Tymon\JWTAuth\Exceptions\JWTException;
 
 
 class AuthController extends Controller
@@ -82,7 +84,7 @@ class AuthController extends Controller
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 1440
+            'expires_in' => auth()->factory()->getTTL() * 60
         ]);
     }
 
@@ -101,6 +103,8 @@ class AuthController extends Controller
             $validator->validate(),
             ['password' => bcrypt($request->password)]
         ));
+
+        $token = JWTAuth::fromUser($user);
 
         return response()->json([
             'Message' => 'Usuario creado satisfactoriamente',
